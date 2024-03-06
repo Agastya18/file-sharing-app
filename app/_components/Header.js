@@ -73,14 +73,14 @@ const Header = () => {
             <div className="hidden justify-end pr-16 sm:flex lg:pr-0">
               <Link
                 href="/#"
-                className="px-7 py-3 text-base font-medium text-dark hover:text-primary bg-blue-400 rounded-md  "
+                className="px-7 py-3 text-base font-medium text-dark hover:text-primary  bg-purple-300 rounded-md  "
               >
                 Sign in
               </Link>
 
               <Link
                 href="/#"
-                className="rounded-md bg-primary px-7 py-3 text-base font-medium text-black hover:bg-primary/90 bg-blue-400 md:ml-7 "
+                className="rounded-md bg-primary px-7 py-3 text-base font-medium text-black hover:bg-primary/90 bg-purple-300 md:ml-7 "
               >
                 Sign Up
               </Link>

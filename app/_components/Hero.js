@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Hero = () => {
@@ -19,18 +20,18 @@ const Hero = () => {
   
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <a
-            className="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
-            href="#"
+            className="block w-full rounded border border-blue-600 bg-gradient-to-r from-green-300 via-blue-500 to-purple-600  px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
+            href="/upload"
           >
-            Get Started
+            Upload
           </a>
   
-          <a
-            className="block w-full rounded border border-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring active:bg-blue-500 sm:w-auto"
-            href="#"
+          <Link 
+            className="block w-full rounded border border-blue-600 bg-gradient-to-r from-green-300 via-blue-500 to-purple-600  px-12 py-3 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring active:bg-blue-500 sm:w-auto"
+            href="/file"
           >
-            Learn More
-          </a>
+            Get Started
+          </Link>
         </div>
       </div>
     </div>
