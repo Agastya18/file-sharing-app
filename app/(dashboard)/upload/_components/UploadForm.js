@@ -2,9 +2,11 @@
 import React from 'react'
 import { useState } from 'react'
 import FilePreview from './FilePreview';
+import ProgressBar from './ProgressBar';
 
-const UploadForm = ({uploadFile}) => {
+const UploadForm = ({uploadFile,progress}) => {
   const [file,setFile]= useState();
+  
   const onFileSelect = (file)=>{
     setFile(file)
     if(file && file.size > 2*1024*1024){
@@ -53,9 +55,12 @@ const UploadForm = ({uploadFile}) => {
   file?  <FilePreview file={file} removeFile={()=>setFile(null)} /> : null
 }
 
-<button onClick={()=>uploadFile(file)} disabled={!file} className=" p-2 bg-purple-500 text-white w-[30%] rounded-full mt-5
+
+{
+  progress>0 ? <ProgressBar progress={progress}/>:<button onClick={()=>uploadFile(file)} disabled={!file} className=" p-2 bg-purple-500 text-white w-[30%] rounded-full mt-5
   disabled:bg-slate-400
 ">Upload</button>
+}
 
     </div>
   )
