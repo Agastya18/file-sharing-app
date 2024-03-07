@@ -4,9 +4,19 @@ import UploadForm from './_components/UploadForm'
 import {app} from '@/firebaseConfig'
 import { useState } from 'react'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getFirestore, setDoc,doc } from "firebase/firestore";
+import { useUser } from '@clerk/nextjs'
+import CompleteCheck from './_components/CompleteCheck'
+import { useEffect } from 'react'
+import { getneraterandomString } from '@/app/_utils/GenerateString'
 const page = () => {
+
+  const [uploadComplete,setUploadComplete] = useState(false)
+
+  const {user}=useUser();
   const [progress,setProgress] = useState();
   const storage = getStorage(app);
+  const db = getFirestore(app);
 
   const uploadFileData = (file)=>{
     const metadata = {
@@ -23,17 +33,65 @@ const page = () => {
 
    progress==100 &&  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
       console.log('File available at', downloadURL);
+      saveInfo(file,downloadURL)
     });
    
   }, )
    
   }
+
+  const saveInfo = async(file,downloadURL)=>{
+   const docID=Date.now().toString();
+   await setDoc(doc(db,"uplodedFiles",docID),{
+      name:file.name,
+      size:file.size,
+      type:file.type,
+      url:downloadURL,
+      email:user.primaryEmailAddress.emailAddress,
+      username:user.fullName,
+      password:"",
+      shortUrl:process.env.NEXT_PUBLIC_BASE_URL+getneraterandomString()
+
+   })
+   
+   
+  }
+
+  useEffect(() =>{
+    // <CompleteCheck />
+     progress==100 && setTimeout(() =>{
+       setUploadComplete(true)
+     },2000)
+ 
+    },[progress==100])
+
+    useEffect(() =>{
+      // <CompleteCheck />
+      uploadComplete && setTimeout(() =>{
+       
+        setUploadComplete(false)
+
+        window.location.reload()
+      },2000)
+  
+      },[uploadComplete==true])
+
+
+
   return (
     <div className=' p-5 px-8 md:px-28'>
-    <h2 className=' text-[20px] text-center m-5'>
+  {
+    uploadComplete==false && <div>
+  <h2 className=' text-[20px] text-center m-5'>
       Start <strong className=" text-purple-500">Uploading</strong> your files and <strong className=" text-purple-600">share</strong> it.
     </h2>
-      <UploadForm uploadFile={(file)=>uploadFileData(file)} progress={progress}/>
+    <UploadForm uploadFile={(file)=>uploadFileData(file)} progress={progress}/>
+  </div>
+  }
+  {
+    uploadComplete==true && <CompleteCheck />
+  }
+     
     </div>
   )
 }
