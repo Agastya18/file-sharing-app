@@ -9,10 +9,11 @@ import { useUser } from '@clerk/nextjs'
 import CompleteCheck from './_components/CompleteCheck'
 import { useEffect } from 'react'
 import { getneraterandomString } from '@/app/_utils/GenerateString'
+import { useRouter } from 'next/navigation'
 const page = () => {
-
+  const [fileId,setFileId] = useState()
   const [uploadComplete,setUploadComplete] = useState(false)
-
+  const router = useRouter()
   const {user}=useUser();
   const [progress,setProgress] = useState();
   const storage = getStorage(app);
@@ -41,7 +42,7 @@ const page = () => {
   }
 
   const saveInfo = async(file,downloadURL)=>{
-   const docID=Date.now().toString();
+   const docID=getneraterandomString().toString()
    await setDoc(doc(db,"uplodedFiles",docID),{
       name:file.name,
       size:file.size,
@@ -50,10 +51,12 @@ const page = () => {
       email:user.primaryEmailAddress.emailAddress,
       username:user.fullName,
       password:"",
-      shortUrl:process.env.NEXT_PUBLIC_BASE_URL+getneraterandomString()
+      id:docID,
+      shortUrl:process.env.NEXT_PUBLIC_BASE_URL+docID
 
    })
    
+   setFileId(docID)
    
   }
 
@@ -71,7 +74,7 @@ const page = () => {
        
         setUploadComplete(false)
 
-        window.location.reload()
+       router.push('/file-preview/'+fileId)
       },2000)
   
       },[uploadComplete==true])
